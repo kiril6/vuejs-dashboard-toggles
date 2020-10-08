@@ -1,5 +1,5 @@
 <template>
-<div class="sideMenu" :class="{ disabled: this.MasterEnabled}">
+<div class="sideMenu" :class="{ disabled: $pluginLocker.locked}">
 
     <div class="sideMenu__logo">
         <router-link to="/">{{logoPart1}}<span>{{logoPart2}}</span></router-link>
@@ -27,35 +27,21 @@
     </ul>
 
     <div class="sideMenu__master-toggle">
-        {{masterToggleTitle}} {{masterToggleStatus}}
-        <toggle-button :value="!this.MasterEnabled" :color="{ checked: '#5BC88D', unchecked: '#C63040', disabled: '#CCCCCC' }" :sync="false" :labels="false" :width="46" :height="30" @change="onChangeToggle()" />
+        {{masterToggleTitle}} {{!$pluginLocker.locked ? 'enabled' : 'disabled'}}
+        <toggle-button :value="!$pluginLocker.locked" :color="{ checked: '#5BC88D', unchecked: '#C63040' }" :width="46" :height="30" @change="$pluginLocker.lock" />
     </div>
 
 </div>
 </template>
 
 <script>
-import { EventBus } from '@/event-bus'
 export default {
     name: 'SideMenu',
     data() {
         return {
             logoPart1: 'Data',
             logoPart2: 'Guard',
-            tab2Title: 'Finance',
-            tab3Title: 'Personnel',
             masterToggleTitle: 'All plugins ',
-            masterToggleStatus: 'enabled'
-        }
-    },
-    methods: {
-      onChangeToggle() {
-        EventBus.$emit('master-switch-clicked');
-          // this.MasterEnabled = !this.MasterEnabled
-
-          this.MasterEnabled= !this.MasterEnabled
-          console.log(this.MasterEnabled)
-          return this.MasterEnabled ? this.masterToggleStatus = 'disabled' : this.masterToggleStatus = 'enabled'
         }
     },
     props: {
@@ -69,8 +55,6 @@ export default {
     }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style lang="scss" scoped>
 @import "@/assets/styles/color.scss";

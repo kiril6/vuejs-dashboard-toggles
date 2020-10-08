@@ -12,15 +12,23 @@ Vue.use(VueTablerIcons);
 Vue.use(ToggleButton);
 Vue.use(VueAxios, axios);
 
-Vue.mixin({
-  data: function() {
-    return {
-      MasterEnabled: false
-    }
-  }
-})
+const MasterEnabled = Vue.observable({
+  locked: false,
+  
+  lock () {
+    MasterEnabled.locked = !MasterEnabled.locked;
+  },
+
+});
+
+Vue.prototype.$pluginLocker = MasterEnabled;
 
 new Vue({
   router,
+  watch: {
+    '$pluginLocker.locked' () {
+      return
+    }
+  },
   render: h => h(App)
 }).$mount('#app')

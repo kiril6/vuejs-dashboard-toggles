@@ -1,23 +1,23 @@
 <template>
 <div id="app">
 
-  <div v-if="!this.dataObject.data">
-    <div class="holder">
-      <div class="holder__loader"></div>
+    <div v-if="!this.dataObject.data">
+        <div class="holder">
+            <div class="holder__loader"></div>
+        </div>
     </div>
-  </div>
     <template v-else>
-      <nav>
-          <SideMenu :tab-number="this.renderTabs()"/>
-      </nav>
-      <div class="holder">
-          <div class="holder__nav-title">
-              {{this.routeActiveTitle ? routeActiveTitle : homeTitle }}
-          </div>
-          <div class="holder__plugins-holder">
-              <router-view :pluginList="this.renderPlugins()" :tabData="this.renderTabs()"/>
-          </div>
-      </div>
+        <nav>
+            <SideMenu :tab-number="this.renderTabs()" />
+        </nav>
+        <div class="holder">
+            <div class="holder__nav-title">
+                {{this.routeActiveTitle ? routeActiveTitle : homeTitle }}
+            </div>
+            <div class="holder__plugins-holder">
+                <router-view :pluginList="this.renderPlugins()" :tabData="this.renderTabs()" />
+            </div>
+        </div>
     </template>
 
 </div>
@@ -44,24 +44,24 @@ export default {
         }
 
         this.axios.get('https://dataguard.blob.core.windows.net/challenges/plugins/fe-challenge.json')
-        .then(response => this.dataObject = response.data)
-        .catch(function (error) {
-          console.log(error);
-        });
+            .then(response => this.dataObject = response.data)
+            .catch(function (error) {
+                console.log(error);
+            });
     },
     methods: {
-      renderTabs: function () {
-        return this.dataObject.data.tabdata
-      },
+        renderTabs: function () {
+            return this.dataObject.data.tabdata
+        },
 
-      renderPlugins: function () {
-        return this.dataObject.data.plugins
-      }
+        renderPlugins: function () {
+            return this.dataObject.data.plugins
+        }
     },
     watch: {
         '$route'(to, from) {
             if (to !== from) {
-                return to.name === null ? this.routeActiveTitle = '' : this.routeActiveTitle=to.name + ' Plugins'
+                return to.name === null ? this.routeActiveTitle = '' : this.routeActiveTitle = to.name + ' Plugins'
             }
         }
     }
@@ -92,20 +92,27 @@ body {
     justify-content: flex-start;
 
     &__loader {
-      border: 16px solid #f3f3f3; /* Light grey */
-      border-top: 16px solid #3498db; /* Blue */
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      animation: spin 2s linear infinite;
-      position: fixed;
-      top: 50px;
-      left: 50px;
+        border: 16px solid #f3f3f3;
+        /* Light grey */
+        border-top: 16px solid #3498db;
+        /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        position: fixed;
+        top: 50px;
+        left: 50px;
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     &__nav-title {

@@ -1,11 +1,11 @@
 <template>
-<div class="plugin" :class="{disabled: MasterEnabled || disabledPlugin}">
+<div class="plugin" :class="{disabled: $pluginLocker.locked || disabledPlugin}">
     <div class="plugin__header">
         <div class="plugin__header-title">
             {{pluginTitle}}
         </div>
-        <div class="plugin__header-toggle" :class="[toggleValue || active || inactive ? 'active' : 'blocked']">
-            <toggle-button :value="toggleValue || active || inactive" :disabled="MasterEnabled || disabledPlugin" :color="{ checked: '#5BC88D', unchecked: '#C63040'}" :sync="false" :labels="false" :width="36" :height="20" @change="onChangeToggle" />
+        <div class="plugin__header-toggle" :class="[$pluginLocker.locked || active || inactive ? 'active' : 'blocked']">
+            <toggle-button :value="toggleValue || active || inactive" :disabled="$pluginLocker.locked || disabledPlugin" :color="{ checked: '#5BC88D', unchecked: '#C63040'}" :width="36" :height="20" @change="onChangeToggle" />
             <span></span>
         </div>
     </div>
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { EventBus } from '@/event-bus'
 export default {
     name: 'Plugin',
     data() {
@@ -30,11 +29,6 @@ export default {
         onChangeToggle() {
             this.toggleValue = !this.toggleValue
         }
-    },
-     mounted() {
-        EventBus.$on('master-switch-clicked', () => {
-            this.MasterEnabled = !this.MasterEnabled
-        });
     },
     props: {
         active: Boolean,

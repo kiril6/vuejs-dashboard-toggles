@@ -1,10 +1,6 @@
 <template>
 <div class="personnel">
-    <plugin v-for="(item, key, index) in pluginList"
-     :key="index"
-     :disabled-plugin="getCategoryPluginStates.disabled.toString() === key ? true : false" 
-     :plugin-title="item.title" 
-     :plugin-description="item.description" />
+    <plugin v-for="(item, key, index) in pluginList" :key="index" :disabled-plugin="getCategoryPluginStates.disabled.toString() === key ? true : false" :plugin-title="item.title" :plugin-description="item.description" />
 </div>
 </template>
 
@@ -22,36 +18,35 @@ export default {
         }
     },
     props: {
-      pluginList:{
-        type: Object,
-        required: true,
-        default: null
-      },
-       tabData:{
-        type: Object,
-        required: true,
-        default: null
-      }
+        pluginList: {
+            type: Object,
+            required: true,
+            default: null
+        },
+        tabData: {
+            type: Object,
+            required: true,
+            default: null
+        }
     },
-      mounted() {
-      this.getUrlPath()
+    mounted() {
+        this.getUrlPath()
     },
     computed: {
-      getCategoryPluginStates: function() {
-          return this.tabData[this.getUrlPath()]
-      }
+        getCategoryPluginStates: function () {
+            return this.tabData[this.getUrlPath()]
+        }
 
     },
     methods: {
-        getUrlPath () {
-          if(window.location.pathname==='/marketing') {
-              return 'tab1'
-          }else if(window.location.pathname==='/finance') {
-              return 'tab2'
-          }
-          else if(window.location.pathname==='/personnel') {
-              return 'tab3'
-          }
+        getUrlPath() {
+            if (window.location.pathname === '/marketing') {
+                return 'tab1'
+            } else if (window.location.pathname === '/finance') {
+                return 'tab2'
+            } else if (window.location.pathname === '/personnel') {
+                return 'tab3'
+            }
         }
     }
 }
