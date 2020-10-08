@@ -1,7 +1,7 @@
 <template>
 <div id="app">
 
-    <div v-if="!this.dataObject.data">
+    <div v-if="this.loading">
         <div class="holder">
             <div class="holder__loader"></div>
         </div>
@@ -32,7 +32,8 @@ export default {
         return {
             homeTitle: 'Please select a category from navigation menu',
             routeActiveTitle: '',
-            dataObject: Object
+            dataObject: Object,
+            loading: true
         }
     },
     components: {
@@ -47,7 +48,7 @@ export default {
             .then(response => this.dataObject = response.data)
             .catch(function (error) {
                 console.log(error);
-            });
+            }).finally(() => this.loading = false);
     },
     methods: {
         renderTabs: function () {

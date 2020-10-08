@@ -1,11 +1,11 @@
 <template>
-<div class="plugin" :class="{disabled: $pluginLocker.locked || disabledPlugin}">
+<div v-if="availablePlugins" class="plugin" :class="{disabled: $pluginLocker.locked || disabledPlugin}">
     <div class="plugin__header">
         <div class="plugin__header-title">
             {{pluginTitle}}
         </div>
-        <div class="plugin__header-toggle" :class="[$pluginLocker.locked || active || inactive ? 'active' : 'blocked']">
-            <toggle-button :value="toggleValue || active || inactive" :disabled="$pluginLocker.locked || disabledPlugin" :color="{ checked: '#5BC88D', unchecked: '#C63040'}" :width="36" :height="20" @change="onChangeToggle" />
+        <div class="plugin__header-toggle" :class="[this.toggleValue ? 'active' : 'blocked']">
+            <toggle-button :value="this.toggleValue || getPluginStates(active, inactive)" :disabled="$pluginLocker.locked || disabledPlugin" :color="{ checked: '#5BC88D', unchecked: '#C63040'}" :width="36" :height="20" @change="onChangeToggle" />
             <span></span>
         </div>
     </div>
@@ -22,17 +22,33 @@ export default {
     data() {
         return {
             isDisabled: false,
-            toggleValue: false
+            toggleValue: false,
+            manualToggle: Boolean
         }
     },
     methods: {
         onChangeToggle() {
-            this.toggleValue = !this.toggleValue
+          this.manualToggle = !this.manualToggle
+        },
+        getPluginStates(active, inactive) {
+            if (active) {
+                this.toggleValue = active
+            } else if (inactive) {
+                this.toggleValue = !inactive
+            }
+
+            return this.toggleValue
         }
     },
     props: {
         active: Boolean,
         inactive: Boolean,
+
+        availablePlugins: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
 
         disabledPlugin: {
             type: Boolean,

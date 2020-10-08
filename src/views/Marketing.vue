@@ -1,6 +1,6 @@
 <template>
 <div class="marketing">
-    <plugin v-for="(item, key, index) in pluginList" :key="index" :active="getCategoryPluginStates.active[index] === key ? true : false" :inactive="getCategoryPluginStates.inactive[index] === key ? true : false" :disabled-plugin="getCategoryPluginStates.disabled.toString() === key ? true : false" :plugin-title="item.title" :plugin-description="item.description" style="display:none" :style="availablePlugins(index) === key ? 'display: block;' : ''" />
+  <plugin v-for="(item, key, index) in pluginList" :key="index" :active="getCategoryPluginStates.active.indexOf(key)>-1" :inactive="getCategoryPluginStates.inactive.indexOf(key)>-1" :disabled-plugin="getCategoryPluginStates.disabled.indexOf(key)>-1" :availablePlugins="getAvailablePlugins(key)" :plugin-title="item.title" :plugin-description="item.description" />
 </div>
 </template>
 
@@ -31,19 +31,11 @@ export default {
     },
     mounted() {
         this.getUrlPath()
-        this.availablePlugins()
     },
     computed: {
         getCategoryPluginStates: function () {
-            return this.tabData[this.getUrlPath()]
-        },
-
-        // activeUsers: function() {
-        //  return this.pluginList.filter(function(u) {
-        //    return u.availablePlugins()
-        //  })
-        // }
-
+          return this.tabData[this.getUrlPath()]
+        }
     },
     methods: {
         getUrlPath() {
@@ -55,14 +47,12 @@ export default {
                 return 'tab3'
             }
         },
-        availablePlugins(index) {
-
+          getAvailablePlugins(key) {
             let combinedArray = []
+    
             combinedArray.push(...this.tabData[this.getUrlPath()].active, ...this.tabData[this.getUrlPath()].inactive, ...this.tabData[this.getUrlPath()].disabled)
-
-            return combinedArray[index]
+            return combinedArray.indexOf(key)>-1;
         }
-
     }
 }
 </script>

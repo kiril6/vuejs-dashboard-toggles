@@ -1,6 +1,6 @@
 <template>
 <div class="personnel">
-    <plugin v-for="(item, key, index) in pluginList" :key="index" :disabled-plugin="getCategoryPluginStates.disabled.toString() === key ? true : false" :plugin-title="item.title" :plugin-description="item.description" />
+  <plugin v-for="(item, key, index) in pluginList" :key="index" :active="getCategoryPluginStates.active[index] === key ? true : false" :inactive="getCategoryPluginStates.inactive.indexOf(key)>-1" :disabled-plugin="getCategoryPluginStates.disabled.indexOf(key)>-1" :availablePlugins="getAvailablePlugins(key)" :plugin-title="item.title" :plugin-description="item.description" />
 </div>
 </template>
 
@@ -34,9 +34,8 @@ export default {
     },
     computed: {
         getCategoryPluginStates: function () {
-            return this.tabData[this.getUrlPath()]
+          return this.tabData[this.getUrlPath()]
         }
-
     },
     methods: {
         getUrlPath() {
@@ -47,6 +46,12 @@ export default {
             } else if (window.location.pathname === '/personnel') {
                 return 'tab3'
             }
+        },
+          getAvailablePlugins(key) {
+            let combinedArray = []
+    
+            combinedArray.push(...this.tabData[this.getUrlPath()].active, ...this.tabData[this.getUrlPath()].inactive, ...this.tabData[this.getUrlPath()].disabled)
+            return combinedArray.indexOf(key)>-1;
         }
     }
 }
