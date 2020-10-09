@@ -5,7 +5,7 @@
             {{pluginTitle}}
         </div>
         <div class="plugin__header-toggle" :class="[this.toggleValue ? 'active' : 'blocked']">
-            <toggle-button :value="this.toggleValue || getPluginStates(active, inactive)" :disabled="$pluginLocker.locked || disabledPlugin" :color="{ checked: '#5BC88D', unchecked: '#C63040'}" :width="36" :height="20" @change="onChangeToggle" />
+            <toggle-button :value="this.toggleValue" :disabled="$pluginLocker.locked || disabledPlugin" :color="{ checked: '#5BC88D', unchecked: '#C63040'}" :width="36" :height="20" @change="onChangeToggle" />
             <span></span>
         </div>
     </div>
@@ -26,14 +26,18 @@ export default {
             manualToggle: Boolean
         }
     },
+    created() {
+           this.getPluginStates(this.active, this.inactive)
+    },
     methods: {
         onChangeToggle() {
-          this.manualToggle = !this.manualToggle
+          this.toggleValue = !this.toggleValue
         },
         getPluginStates(active, inactive) {
             if (active) {
                 this.toggleValue = active
-            } else if (inactive) {
+            }
+             if (inactive) {
                 this.toggleValue = !inactive
             }
 
